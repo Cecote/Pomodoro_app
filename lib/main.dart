@@ -115,36 +115,37 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
       body: Column(
         children: [
           Expanded(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox(
-                  width: 300,
-                  height: 300,
-                  child: CircularProgressIndicator(
-                    color: Colors.black,
-                    backgroundColor: Colors.grey.shade300,
-                    value: progress,
-                    strokeWidth: 3,
-                  ),
-                ),
-                AnimatedBuilder(
-                  animation: controller,
-                  builder: (context, child) => Text(
-                    countText,
-                    style: TextStyle(
-                      fontSize: 60,
-                      fontFamily: 'Montserrat',
+            child: Center(
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  SizedBox(
+                    width: 300,
+                    height: 300,
+                    child: CircularProgressIndicator(
+                      color: Colors.black,
+                      backgroundColor: Colors.grey.shade300,
+                      value: progress,
+                      strokeWidth: 3,
                     ),
                   ),
-                ),
-              ],
+                  AnimatedBuilder(
+                    animation: controller,
+                    builder: (context, child) => Text(
+                      countText,
+                      style: TextStyle(
+                        fontSize: 60,
+                        fontFamily: 'Montserrat',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: Column(
               children: [
                 RoundButton(
                   text: isCounting == true ? 'Pausar' : 'Iniciar',
