@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/round-button.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
         ),
         home: Scaffold(
           appBar: AppBar(
+            centerTitle: true,
             backgroundColor: Colors.white,
             leading: IconButton(
               icon: Icon(
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
             ),
             title: Text(
               'Pomodoro',
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.black, fontFamily: 'Titi'),
             ),
           ),
           body: pomoTimer(),
@@ -48,6 +50,7 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
   late AnimationController controller;
   bool isCounting = false;
 
+
   String get countText{
     Duration count = controller.duration! * controller.value;
     if(controller.value == 0){
@@ -64,6 +67,14 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
     }
   }
 
+  double progress = 1.0;
+
+  void notify() {
+    if(countText == '00:00:00'){
+      FlutterRingtonePlayer.playNotification();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -74,8 +85,14 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
       ),
     );
     controller.addListener((){
-      if(!controller.isAnimating){
+      notify();
+      if(controller.isAnimating){
         setState(() {
+          progress = controller.value;
+        });
+      }else {
+        setState(() {
+          progress = 1.0;
           isCounting = false;
         });
       }
@@ -98,17 +115,30 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
       body: Column(
         children: [
           Expanded(
-            child: Center(
-              child: AnimatedBuilder(
-                animation: controller,
-                builder: (context, child) => Text(
-                  countText,
-                  style: TextStyle(
-                    fontSize: 60,
-                    fontWeight: FontWeight.bold,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: 300,
+                  height: 300,
+                  child: CircularProgressIndicator(
+                    color: Colors.black,
+                    backgroundColor: Colors.grey.shade300,
+                    value: progress,
+                    strokeWidth: 3,
                   ),
                 ),
-              ),
+                AnimatedBuilder(
+                  animation: controller,
+                  builder: (context, child) => Text(
+                    countText,
+                    style: TextStyle(
+                      fontSize: 60,
+                      fontFamily: 'Montserrat',
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(

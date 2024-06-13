@@ -34,6 +34,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  flutter_ringtone_player: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -73,10 +74,23 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+     - family: Montserrat
+       fonts:
+         - asset: assets/fonts/Montserrat-VariableFont_wght.ttf
+     - family: Roboto
+       fonts:
+         - asset: assets/fonts/Roboto-Regular.ttf
+     - family: Spicy
+       fonts:
+         - asset: assets/fonts/SpicyRice-Regular.ttf
+     - family: Inconsolata
+       fonts:
+         - asset: assets/fonts/Inconsolata-VariableFont_wdth.ttf
+     - family: Titi
+       fonts:
+         - asset: assets/fonts/TitilliumWeb-Bold.ttf
+
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
