@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/round-button.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import '../widgets/menu-button.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,13 +21,7 @@ class MyApp extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             backgroundColor: Colors.white,
-            leading: IconButton(
-              icon: Icon(
-                Icons.menu,
-                color: Colors.black,
-              ),
-              onPressed: () {},
-            ),
+            leading: MenuButton(),
             title: Text(
               'Pomodoro',
               style: TextStyle(color: Colors.black, fontFamily: 'Titi'),
