@@ -18,20 +18,20 @@ class RoundButton extends StatelessWidget {
       ),
       child: ElevatedButton(
           style: ButtonStyle(
-            minimumSize: MaterialStateProperty.resolveWith<Size>(
-                  (Set<MaterialState> states) {
-                    return Size(88, 36);
+            minimumSize: WidgetStateProperty.resolveWith<Size>(
+                  (Set<WidgetState> states) {
+                    return Size(132, 54);
               },
             ),
-            shape: MaterialStateProperty.resolveWith<OutlinedBorder?>(
-                  (Set<MaterialState> states) {
+            shape: WidgetStateProperty.resolveWith<OutlinedBorder?>(
+                  (Set<WidgetState> states) {
                 return RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
                 );
               },
             ),
-            backgroundColor: MaterialStateProperty.all(Colors.white),
-            side: MaterialStateProperty.all<BorderSide>(
+            backgroundColor: WidgetStateProperty.all(Colors.white),
+            side: WidgetStateProperty.all<BorderSide>(
                 BorderSide(color: Colors.black, width: 1.0)),
           ),
           onPressed: onPressed, // Chama a função passada

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/round-button.dart';
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import '../widgets/menu-button.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,6 +43,7 @@ class pomoTimer extends StatefulWidget {
 class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
 
   late AnimationController controller;
+  final player = AudioPlayer();
   bool isCounting = false;
 
 
@@ -66,7 +67,7 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
 
   void notify() {
     if(countText == '00:00:00'){
-      FlutterRingtonePlayer.playNotification();
+      player.play(AssetSource('notify.mp3'));
     }
   }
 
@@ -158,6 +159,7 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
                     }
                   },
                 ),
+                SizedBox(height: 10),
                 RoundButton(
                   text: 'Parar',
                   onPressed: () {

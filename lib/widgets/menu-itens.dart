@@ -13,10 +13,10 @@ class MenuItens extends StatelessWidget {
           height: 50,
           child: ElevatedButton(
             style: ButtonStyle(
-                side: MaterialStateProperty.all<BorderSide>(
+                side: WidgetStateProperty.all<BorderSide>(
                     BorderSide(color: Colors.black, width: 1.0)),
-              minimumSize: MaterialStateProperty.all(Size(40, 30)),
-              backgroundColor: MaterialStateProperty.all(Colors.white)
+              minimumSize: WidgetStateProperty.all(Size(40, 30)),
+              backgroundColor: WidgetStateProperty.all(Colors.white)
             ),
             onPressed: () {},
             child: Text(
