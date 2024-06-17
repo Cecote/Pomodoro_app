@@ -1,3 +1,4 @@
+import 'package:Pomodoro/config-menu.dart';
 import 'package:flutter/material.dart';
 
 class MenuButton extends StatelessWidget {
@@ -6,7 +7,9 @@ class MenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => MenuPage()));
+      },
       child: const Icon(
         Icons.settings,
         color: Colors.black,
