@@ -29,15 +29,24 @@ class PomodoroConfig extends StatefulWidget {
 }
 
 class _PomodoroConfigState extends State<PomodoroConfig> {
-  final TextEditingController focusHoursController = TextEditingController(text: '00');
-  final TextEditingController focusMinutesController = TextEditingController(text: '25');
-  final TextEditingController focusSecondsController = TextEditingController(text: '00');
-  final TextEditingController shortBreakHoursController = TextEditingController(text: '00');
-  final TextEditingController shortBreakMinutesController = TextEditingController(text: '05');
-  final TextEditingController shortBreakSecondsController = TextEditingController(text: '00');
-  final TextEditingController longBreakHoursController = TextEditingController(text: '00');
-  final TextEditingController longBreakMinutesController = TextEditingController(text: '10');
-  final TextEditingController longBreakSecondsController = TextEditingController(text: '00');
+  final TextEditingController focusHoursController =
+      TextEditingController(text: '00');
+  final TextEditingController focusMinutesController =
+      TextEditingController(text: '25');
+  final TextEditingController focusSecondsController =
+      TextEditingController(text: '00');
+  final TextEditingController shortBreakHoursController =
+      TextEditingController(text: '00');
+  final TextEditingController shortBreakMinutesController =
+      TextEditingController(text: '05');
+  final TextEditingController shortBreakSecondsController =
+      TextEditingController(text: '00');
+  final TextEditingController longBreakHoursController =
+      TextEditingController(text: '00');
+  final TextEditingController longBreakMinutesController =
+      TextEditingController(text: '10');
+  final TextEditingController longBreakSecondsController =
+      TextEditingController(text: '00');
 
   String focusHours = '00';
   String focusMinutes = '25';
@@ -58,7 +67,8 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
       backgroundColor: Color(0xfff5fbff),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(bottom: bottomInset), // Adiciona padding na parte inferior
+          padding: EdgeInsets.only(bottom: bottomInset),
+          // Adiciona padding na parte inferior
           child: Column(
             children: [
               Container(
@@ -66,10 +76,7 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
                 padding: EdgeInsets.all(10),
                 child: Text(
                   'Tempo para focar',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'Titi'
-                  ),
+                  style: TextStyle(fontSize: 20, fontFamily: 'Titi'),
                 ),
               ),
               Row(
@@ -127,10 +134,7 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
                 padding: EdgeInsets.all(10),
                 child: Text(
                   'Tempo para descansar (Curto)',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'Titi'
-                  ),
+                  style: TextStyle(fontSize: 20, fontFamily: 'Titi'),
                 ),
               ),
               Row(
@@ -188,10 +192,7 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
                 padding: EdgeInsets.all(10),
                 child: Text(
                   'Tempo para descansar (Longo)',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'Titi'
-                  ),
+                  style: TextStyle(fontSize: 20, fontFamily: 'Titi'),
                 ),
               ),
               Row(
@@ -242,22 +243,28 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 70),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 70),
                 child: RoundButton(
                     text: 'Salvar',
                     onPressed: () {
                       // Implemente a lógica de salvar aqui
-                      print('Focus Time: $focusHours:$focusMinutes:$focusSeconds');
-                      print('Short Break Time: $shortBreakHours:$shortBreakMinutes:$shortBreakSeconds');
-                      print('Long Break Time: $longBreakHours:$longBreakMinutes:$longBreakSeconds');
+                      print(
+                          'Focus Time: $focusHours:$focusMinutes:$focusSeconds');
+                      print(
+                          'Short Break Time: $shortBreakHours:$shortBreakMinutes:$shortBreakSeconds');
+                      print(
+                          'Long Break Time: $longBreakHours:$longBreakMinutes:$longBreakSeconds');
                       FocusTime focusTime = FocusTime(
                         int.parse(focusHours),
                         int.parse(focusMinutes),
                         int.parse(focusSeconds),
+                        int.parse(shortBreakHours),
+                        int.parse(shortBreakMinutes),
+                        int.parse(shortBreakSeconds),
                       );
                       Navigator.pop(context, focusTime);
-                    }
-                ),
+                    }),
               ),
             ],
           ),
@@ -303,9 +310,10 @@ class CustomTextField extends StatelessWidget {
         onSubmitted: (value) {
           if (value.length == 1) {
             controller.text = '0' + value;
-            onChanged('0' + value);  // Ensure the state is updated with the padded value
+            onChanged('0' +
+                value); // Ensure the state is updated with the padded value
           }
-          if(value.length == 0){
+          if (value.length == 0) {
             controller.text = '00';
             onChanged('00');
           }
@@ -315,11 +323,19 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
-
 class FocusTime {
-  final int hours;
-  final int minutes;
-  final int seconds;
+  final int returnFocusHours;
+  final int returnFocusMinutes;
+  final int returnFocusSeconds;
+  final int returnBreakHours;
+  final int returnBreakMinutes;
+  final int returnBreakSeconds;
 
-  FocusTime(this.hours, this.minutes, this.seconds);
+  FocusTime(
+      this.returnFocusHours,
+      this.returnFocusMinutes,
+      this.returnFocusSeconds,
+      this.returnBreakHours,
+      this.returnBreakMinutes,
+      this.returnBreakSeconds);
 }

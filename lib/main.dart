@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/round-button.dart';
 import 'package:Pomodoro/config-menu.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:wakelock/wakelock.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,6 +13,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Wakelock.enable();
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -62,52 +64,57 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
   late AnimationController controller;
   final player = AudioPlayer();
   bool isCounting = false;
+  bool isFocusing = true; // Variável para alternar entre foco e descanso
+  double progress = 1.0;
+  int skip = 0;
   int focusTimerH = 0;
   int focusTimerM = 25;
   int focusTimerS = 0;
   int shortBreakTimerH = 0;
   int shortBreakTimerM = 5;
   int shortBreakTimerS = 0;
-  int longBreakTimerH = 0;
-  int longBreakTimerM = 10;
-  int longBreakTimerS = 0;
-
 
   String get countText {
     Duration count = controller.duration! * controller.value;
     if (controller.value == 0) {
-      count = Duration(hours: focusTimerH, minutes: focusTimerM, seconds: focusTimerS);
+      count = isFocusing
+          ? Duration(hours: focusTimerH, minutes: focusTimerM, seconds: focusTimerS)
+          : Duration(hours: shortBreakTimerH, minutes: shortBreakTimerM, seconds: shortBreakTimerS);
     }
     return '${(count.inHours % 60).toString().padLeft(2, '0')}:${(count.inMinutes % 60).toString().padLeft(2, '0')}:${(count.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
-  void zerado() {
-    if (controller.value == 0) {
-      setState(() {
-        isCounting = false;
-      });
-    }
-  }
-
-  double progress = 1.0;
-
   void notify() {
-    if (countText == '00:00:00') {
-      player.play(AssetSource('notify.mp3'));
+    if (controller.value == 0) {
+      if(skip == 0){
+        player.play(AssetSource('notify.mp3'));
+      }
+      skip = 0;
+      // Alternar entre foco e descanso
+      setState(() {
+        isFocusing = !isFocusing;
+        controller.duration = isFocusing
+            ? Duration(hours: focusTimerH, minutes: focusTimerM, seconds: focusTimerS)
+            : Duration(hours: shortBreakTimerH, minutes: shortBreakTimerM, seconds: shortBreakTimerS);
+        if (isCounting) {
+          controller.reverse(from: 1.0);
+        }
+      });
     }
   }
 
   void setFocusTime(FocusTime focusTime) {
     setState(() {
-      focusTimerH = focusTime.hours;
-      focusTimerM = focusTime.minutes;
-      focusTimerS = focusTime.seconds;
-      print('Focus Time: $focusTimerH:$focusTimerM:$focusTimerS');
-      controller.duration = Duration(
-        hours: focusTimerH,
-        minutes: focusTimerM,
-        seconds: focusTimerS,
-      );
+      focusTimerH = focusTime.returnFocusHours;
+      focusTimerM = focusTime.returnFocusMinutes;
+      focusTimerS = focusTime.returnFocusSeconds;
+      shortBreakTimerH = focusTime.returnBreakHours;
+      shortBreakTimerM = focusTime.returnBreakMinutes;
+      shortBreakTimerS = focusTime.returnBreakSeconds;
+
+      controller.duration = isFocusing
+          ? Duration(hours: focusTimerH, minutes: focusTimerM, seconds: focusTimerS)
+          : Duration(hours: shortBreakTimerH, minutes: shortBreakTimerM, seconds: shortBreakTimerS);
     });
   }
 
@@ -116,11 +123,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
     super.initState();
     controller = AnimationController(
       vsync: this,
-      duration: Duration(
-        hours: focusTimerH,
-        minutes: focusTimerM,
-        seconds: focusTimerS,
-      ),
+      duration: Duration(hours: focusTimerH, minutes: focusTimerM, seconds: focusTimerS),
     );
     controller.addListener(() {
       notify();
@@ -131,7 +134,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
       } else {
         setState(() {
           progress = 1.0;
-          isCounting = false;
+          //isCounting = false;
         });
       }
     });
@@ -141,6 +144,28 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
   void dispose() {
     controller.dispose();
     super.dispose();
+  }
+
+  void resetTimer() {
+    if (!controller.isAnimating) {
+      setState(() {
+        skip++;
+        controller.reset();
+        progress = 1.0;
+        isCounting = false;
+        // Atualiza a duração do controlador sem iniciar o contador
+        controller.duration = isFocusing
+            ? Duration(hours: focusTimerH, minutes: focusTimerM, seconds: focusTimerS)
+            : Duration(hours: shortBreakTimerH, minutes: shortBreakTimerM, seconds: shortBreakTimerS);
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Pare o timer para pular etapas'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   @override
@@ -200,13 +225,8 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
                 ),
                 const SizedBox(height: 10),
                 RoundButton(
-                  text: 'Parar',
-                  onPressed: () {
-                    controller.reset();
-                    setState(() {
-                      isCounting = false;
-                    });
-                  },
+                  text: isFocusing == false ? 'Pular para foco' : 'Pular para descanso',
+                  onPressed: resetTimer,
                 ),
               ],
             ),
@@ -239,4 +259,3 @@ class MenuButton extends StatelessWidget {
     );
   }
 }
-

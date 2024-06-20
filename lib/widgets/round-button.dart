@@ -20,7 +20,7 @@ class RoundButton extends StatelessWidget {
           style: ButtonStyle(
             minimumSize: WidgetStateProperty.resolveWith<Size>(
                   (Set<WidgetState> states) {
-                    return Size(132, 54);
+                    return Size(175, 54);
               },
             ),
             shape: WidgetStateProperty.resolveWith<OutlinedBorder?>(
