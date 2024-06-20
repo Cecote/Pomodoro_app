@@ -250,7 +250,12 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
                       print('Focus Time: $focusHours:$focusMinutes:$focusSeconds');
                       print('Short Break Time: $shortBreakHours:$shortBreakMinutes:$shortBreakSeconds');
                       print('Long Break Time: $longBreakHours:$longBreakMinutes:$longBreakSeconds');
-                      Navigator.pop(context, int.parse(focusMinutes));
+                      FocusTime focusTime = FocusTime(
+                        int.parse(focusHours),
+                        int.parse(focusMinutes),
+                        int.parse(focusSeconds),
+                      );
+                      Navigator.pop(context, focusTime);
                     }
                 ),
               ),
@@ -300,8 +305,21 @@ class CustomTextField extends StatelessWidget {
             controller.text = '0' + value;
             onChanged('0' + value);  // Ensure the state is updated with the padded value
           }
+          if(value.length == 0){
+            controller.text = '00';
+            onChanged('00');
+          }
         },
       ),
     );
   }
+}
+
+
+class FocusTime {
+  final int hours;
+  final int minutes;
+  final int seconds;
+
+  FocusTime(this.hours, this.minutes, this.seconds);
 }

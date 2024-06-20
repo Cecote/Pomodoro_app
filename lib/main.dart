@@ -39,7 +39,7 @@ class _PomodoroPageState extends State<PomodoroPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         leading: MenuButton(onValueSelected: (value) {
-          _pomoTimerKey.currentState?.setValor(value);
+          _pomoTimerKey.currentState?.setFocusTime(value);
         }),
         title: const Text(
           'Pomodoro',
@@ -65,11 +65,18 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
   int focusTimerH = 0;
   int focusTimerM = 25;
   int focusTimerS = 0;
+  int shortBreakTimerH = 0;
+  int shortBreakTimerM = 5;
+  int shortBreakTimerS = 0;
+  int longBreakTimerH = 0;
+  int longBreakTimerM = 10;
+  int longBreakTimerS = 0;
+
 
   String get countText {
     Duration count = controller.duration! * controller.value;
     if (controller.value == 0) {
-      count = Duration(minutes: focusTimerM);
+      count = Duration(hours: focusTimerH, minutes: focusTimerM, seconds: focusTimerS);
     }
     return '${(count.inHours % 60).toString().padLeft(2, '0')}:${(count.inMinutes % 60).toString().padLeft(2, '0')}:${(count.inSeconds % 60).toString().padLeft(2, '0')}';
   }
@@ -90,10 +97,12 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
     }
   }
 
-  void setValor(dynamic valor) {
+  void setFocusTime(FocusTime focusTime) {
     setState(() {
-      focusTimerM = valor;
-      print(focusTimerM);
+      focusTimerH = focusTime.hours;
+      focusTimerM = focusTime.minutes;
+      focusTimerS = focusTime.seconds;
+      print('Focus Time: $focusTimerH:$focusTimerM:$focusTimerS');
       controller.duration = Duration(
         hours: focusTimerH,
         minutes: focusTimerM,
@@ -209,7 +218,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
 }
 
 class MenuButton extends StatelessWidget {
-  final ValueChanged<int> onValueSelected;
+  final ValueChanged<FocusTime> onValueSelected;
 
   const MenuButton({required this.onValueSelected, Key? key}) : super(key: key);
 
@@ -230,3 +239,4 @@ class MenuButton extends StatelessWidget {
     );
   }
 }
+
