@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/round-button.dart';
-import '../widgets/menu-button.dart';
+import 'package:Pomodoro/config-menu.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 void main() {
@@ -13,50 +13,69 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            backgroundColor: Colors.white,
-            leading: MenuButton(),
-            title: Text(
-              'Pomodoro',
-              style: TextStyle(color: Colors.black, fontFamily: 'Titi'),
-            ),
-          ),
-          body: pomoTimer(),
-        ));
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const PomodoroPage(),
+    );
   }
 }
 
-
-class pomoTimer extends StatefulWidget {
-  const pomoTimer({super.key});
+class PomodoroPage extends StatefulWidget {
+  const PomodoroPage({super.key});
 
   @override
-  _pomoTimerState createState() => _pomoTimerState();
+  _PomodoroPageState createState() => _PomodoroPageState();
 }
 
-class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
+class _PomodoroPageState extends State<PomodoroPage> {
+  final GlobalKey<_PomoTimerState> _pomoTimerKey = GlobalKey<_PomoTimerState>();
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        leading: MenuButton(onValueSelected: (value) {
+          _pomoTimerKey.currentState?.setValor(value);
+        }),
+        title: const Text(
+          'Pomodoro',
+          style: TextStyle(color: Colors.black, fontFamily: 'Titi'),
+        ),
+      ),
+      body: PomoTimer(key: _pomoTimerKey),
+    );
+  }
+}
+
+class PomoTimer extends StatefulWidget {
+  const PomoTimer({Key? key}) : super(key: key);
+
+  @override
+  _PomoTimerState createState() => _PomoTimerState();
+}
+
+class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
   late AnimationController controller;
   final player = AudioPlayer();
   bool isCounting = false;
+  int focusTimerH = 0;
+  int focusTimerM = 25;
+  int focusTimerS = 0;
 
-
-  String get countText{
+  String get countText {
     Duration count = controller.duration! * controller.value;
-    if(controller.value == 0){
-      count = Duration(seconds: 10);
+    if (controller.value == 0) {
+      count = Duration(minutes: focusTimerM);
     }
     return '${(count.inHours % 60).toString().padLeft(2, '0')}:${(count.inMinutes % 60).toString().padLeft(2, '0')}:${(count.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
   void zerado() {
-    if(controller.value == 0){
+    if (controller.value == 0) {
       setState(() {
         isCounting = false;
       });
@@ -66,9 +85,21 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
   double progress = 1.0;
 
   void notify() {
-    if(countText == '00:00:00'){
+    if (countText == '00:00:00') {
       player.play(AssetSource('notify.mp3'));
     }
+  }
+
+  void setValor(dynamic valor) {
+    setState(() {
+      focusTimerM = valor;
+      print(focusTimerM);
+      controller.duration = Duration(
+        hours: focusTimerH,
+        minutes: focusTimerM,
+        seconds: focusTimerS,
+      );
+    });
   }
 
   @override
@@ -77,26 +108,25 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
     controller = AnimationController(
       vsync: this,
       duration: Duration(
-          seconds: 10
+        hours: focusTimerH,
+        minutes: focusTimerM,
+        seconds: focusTimerS,
       ),
     );
-    controller.addListener((){
+    controller.addListener(() {
       notify();
-      if(controller.isAnimating){
+      if (controller.isAnimating) {
         setState(() {
           progress = controller.value;
         });
-      }else {
+      } else {
         setState(() {
           progress = 1.0;
           isCounting = false;
         });
       }
-
     });
   }
-
-
 
   @override
   void dispose() {
@@ -107,7 +137,7 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff5fbff),
+      backgroundColor: const Color(0xfff5fbff),
       body: Column(
         children: [
           Expanded(
@@ -129,7 +159,7 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
                     animation: controller,
                     builder: (context, child) => Text(
                       countText,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 60,
                         fontFamily: 'Montserrat',
                       ),
@@ -140,18 +170,18 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             child: Column(
               children: [
                 RoundButton(
                   text: isCounting == true ? 'Pausar' : 'Iniciar',
                   onPressed: () {
-                    if(controller.isAnimating){
+                    if (controller.isAnimating) {
                       controller.stop();
                       setState(() {
                         isCounting = false;
                       });
-                    }else{
+                    } else {
                       controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
                       setState(() {
                         isCounting = true;
@@ -159,7 +189,7 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
                     }
                   },
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 RoundButton(
                   text: 'Parar',
                   onPressed: () {
@@ -173,6 +203,29 @@ class _pomoTimerState extends State<pomoTimer> with TickerProviderStateMixin  {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class MenuButton extends StatelessWidget {
+  final ValueChanged<int> onValueSelected;
+
+  const MenuButton({required this.onValueSelected, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => MenuPage())).then((value) {
+          if (value != null) {
+            onValueSelected(value);
+          }
+        });
+      },
+      child: const Icon(
+        Icons.settings,
+        color: Colors.black,
       ),
     );
   }
