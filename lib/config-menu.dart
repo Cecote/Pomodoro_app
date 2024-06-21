@@ -72,7 +72,7 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
           child: Column(
             children: [
               Container(
-                alignment: AlignmentDirectional.topStart,
+                alignment: AlignmentDirectional.center,
                 padding: EdgeInsets.all(10),
                 child: Text(
                   'Tempo para focar',
@@ -80,7 +80,7 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomTextField(
                     controller: focusHoursController,
@@ -130,7 +130,7 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
                 height: 15,
               ),
               Container(
-                alignment: AlignmentDirectional.topStart,
+                alignment: AlignmentDirectional.center,
                 padding: EdgeInsets.all(10),
                 child: Text(
                   'Tempo para descansar (Curto)',
@@ -138,7 +138,7 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomTextField(
                     controller: shortBreakHoursController,
@@ -188,7 +188,7 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
                 height: 15,
               ),
               Container(
-                alignment: AlignmentDirectional.topStart,
+                alignment: AlignmentDirectional.center,
                 padding: EdgeInsets.all(10),
                 child: Text(
                   'Tempo para descansar (Longo)',
@@ -196,7 +196,7 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomTextField(
                     controller: longBreakHoursController,
