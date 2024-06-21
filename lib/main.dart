@@ -120,6 +120,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
   void setFocusTime(FocusTime focusTime) {
     setState(() {
       isReturnConfigPage = true;
+      skip++;
       focusTimerH = focusTime.returnFocusHours;
       focusTimerM = focusTime.returnFocusMinutes;
       focusTimerS = focusTime.returnFocusSeconds;
