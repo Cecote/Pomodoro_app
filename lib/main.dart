@@ -33,6 +33,7 @@ class PomodoroPage extends StatefulWidget {
 
 class _PomodoroPageState extends State<PomodoroPage> {
   final GlobalKey<_PomoTimerState> _pomoTimerKey = GlobalKey<_PomoTimerState>();
+  final ValueNotifier<bool> isCountingNotifier = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
@@ -40,21 +41,31 @@ class _PomodoroPageState extends State<PomodoroPage> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,
-        leading: MenuButton(onValueSelected: (value) {
-          _pomoTimerKey.currentState?.setFocusTime(value);
-        }),
+        leading: ValueListenableBuilder<bool>(
+          valueListenable: isCountingNotifier,
+          builder: (context, isCounting, child) {
+            return MenuButton(
+              isActive: !isCounting,
+              onValueSelected: (value) {
+                _pomoTimerKey.currentState?.setFocusTime(value);
+              },
+            );
+          },
+        ),
         title: const Text(
           'Pomodoro',
           style: TextStyle(color: Colors.black, fontFamily: 'Titi'),
         ),
       ),
-      body: PomoTimer(key: _pomoTimerKey),
+      body: PomoTimer(key: _pomoTimerKey, isCountingNotifier: isCountingNotifier),
     );
   }
 }
 
 class PomoTimer extends StatefulWidget {
-  const PomoTimer({Key? key}) : super(key: key);
+  final ValueNotifier<bool> isCountingNotifier;
+
+  const PomoTimer({Key? key, required this.isCountingNotifier}) : super(key: key);
 
   @override
   _PomoTimerState createState() => _PomoTimerState();
@@ -65,6 +76,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
   final player = AudioPlayer();
   bool isCounting = false;
   bool isFocusing = true; // Variável para alternar entre foco e descanso
+  bool isReturnConfigPage = false;
   double progress = 1.0;
   int skip = 0;
   int focusTimerH = 0;
@@ -92,7 +104,9 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
       skip = 0;
       // Alternar entre foco e descanso
       setState(() {
-        isFocusing = !isFocusing;
+        if(!isReturnConfigPage){
+          isFocusing = !isFocusing;
+        }
         controller.duration = isFocusing
             ? Duration(hours: focusTimerH, minutes: focusTimerM, seconds: focusTimerS)
             : Duration(hours: shortBreakTimerH, minutes: shortBreakTimerM, seconds: shortBreakTimerS);
@@ -105,6 +119,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
 
   void setFocusTime(FocusTime focusTime) {
     setState(() {
+      isReturnConfigPage = true;
       focusTimerH = focusTime.returnFocusHours;
       focusTimerM = focusTime.returnFocusMinutes;
       focusTimerS = focusTime.returnFocusSeconds;
@@ -115,7 +130,14 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
       controller.duration = isFocusing
           ? Duration(hours: focusTimerH, minutes: focusTimerM, seconds: focusTimerS)
           : Duration(hours: shortBreakTimerH, minutes: shortBreakTimerM, seconds: shortBreakTimerS);
+
+      // Resetar o controlador e o progresso
+      controller.reset();
+      progress = 1.0;
+      isCounting = false;
+      widget.isCountingNotifier.value = isCounting;
     });
+    isReturnConfigPage = false;
   }
 
   @override
@@ -134,7 +156,6 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
       } else {
         setState(() {
           progress = 1.0;
-          //isCounting = false;
         });
       }
     });
@@ -153,6 +174,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
         controller.reset();
         progress = 1.0;
         isCounting = false;
+        widget.isCountingNotifier.value = isCounting;
         // Atualiza a duração do controlador sem iniciar o contador
         controller.duration = isFocusing
             ? Duration(hours: focusTimerH, minutes: focusTimerM, seconds: focusTimerS)
@@ -214,11 +236,13 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
                       controller.stop();
                       setState(() {
                         isCounting = false;
+                        widget.isCountingNotifier.value = isCounting;
                       });
                     } else {
                       controller.reverse(from: controller.value == 0 ? 1.0 : controller.value);
                       setState(() {
                         isCounting = true;
+                        widget.isCountingNotifier.value = isCounting;
                       });
                     }
                   },
@@ -239,23 +263,26 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
 
 class MenuButton extends StatelessWidget {
   final ValueChanged<FocusTime> onValueSelected;
+  final bool isActive;
 
-  const MenuButton({required this.onValueSelected, Key? key}) : super(key: key);
+  const MenuButton({super.key, required this.onValueSelected, required this.isActive});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => MenuPage())).then((value) {
-          if (value != null) {
-            onValueSelected(value);
-          }
-        });
-      },
-      child: const Icon(
-        Icons.settings,
-        color: Colors.black,
-      ),
+    return IconButton(
+      icon: const Icon(Icons.settings),
+      onPressed: isActive
+          ? () async {
+        FocusTime result = await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const MenuPage()),
+        );
+        if (result != null) {
+          onValueSelected(result);
+        }
+      }
+          : null,
+      color: Colors.black,
     );
   }
 }
