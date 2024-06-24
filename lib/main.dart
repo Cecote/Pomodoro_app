@@ -1,4 +1,8 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:Pomodoro/widgets/round-button.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:Pomodoro/config-menu.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -73,6 +77,7 @@ class PomoTimer extends StatefulWidget {
 
 class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
   late AnimationController controller;
+  late ConfettiController _confettiController;
   final player = AudioPlayer();
   bool isCounting = false;
   bool isFocusing = true; // Variável para alternar entre foco e descanso
@@ -89,7 +94,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
   int longBreakTimerH = 0;
   int longBreakTimerM = 10;
   int longBreakTimerS = 0;
-  int numberCycles = 4;
+  int numberCycles = 2;
 
   String get countText {
     Duration count = controller.duration! * controller.value;
@@ -104,15 +109,21 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
   void notify() {
     if (controller.value == 0) {
       if(skip == 0){
-        player.play(AssetSource('notify.mp3'));
         if(isFocusing == false){
           cycle++;
         }
         if(cycle > numberCycles) {
+          player.play(AssetSource('congrat.mp3'));
+          _confettiController.play();
+          _confettiController.play();
+          _confettiController.play();
+          openAnimatedDialog(context);
           cycle = 1;
           controller.stop();
           isCounting = false;
           widget.isCountingNotifier.value = isCounting;
+        } else {
+          player.play(AssetSource('notify.mp3'));
         }
       }
       skip = 0;
@@ -159,9 +170,11 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
     isReturnConfigPage = false;
   }
 
+
   @override
   void initState() {
     super.initState();
+    _confettiController = ConfettiController(duration: const Duration(milliseconds: 800));
     controller = AnimationController(
       vsync: this,
       duration: Duration(hours: focusTimerH, minutes: focusTimerM, seconds: focusTimerS),
@@ -209,6 +222,42 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
     }
   }
 
+  void openAnimatedDialog (BuildContext context) {
+    showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+        barrierLabel: '',
+        pageBuilder: (context, animation1, animation2){
+          return Container(
+
+          );
+        },
+      transitionBuilder: (context, a1, a2, widget){
+          return ScaleTransition(
+            scale: Tween<double>(begin: 0.5, end: 1.0).animate(a1),
+            child: FadeTransition(
+              opacity: Tween<double>(begin: 0.5, end: 1.0).animate(a1),
+              child: AlertDialog(
+                alignment: Alignment.center,
+                title: const Text(
+                  'Parabéns',
+                  textAlign: TextAlign.center,
+                ),
+                content: const Text(
+                  'Você focou!',
+                  textAlign: TextAlign.center,
+                ),
+                shape: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -231,6 +280,17 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: ConfettiWidget(
+                      confettiController: _confettiController,
+                      blastDirection: -pi / 2,
+                      emissionFrequency: 0.2,
+                      numberOfParticles: 40,
+                      blastDirectionality: BlastDirectionality.explosive,
+                      gravity: 0.1,
+                    ),
+                  ),
                   SizedBox(
                     width: 300,
                     height: 300,
