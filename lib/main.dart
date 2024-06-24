@@ -1,5 +1,5 @@
+import 'package:Pomodoro/widgets/round-button.dart';
 import 'package:flutter/material.dart';
-import '../widgets/round-button.dart';
 import 'package:Pomodoro/config-menu.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:wakelock/wakelock.dart';
@@ -78,6 +78,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
   bool isFocusing = true; // Variável para alternar entre foco e descanso
   bool isReturnConfigPage = false;
   double progress = 1.0;
+  int cycle = 1;
   int skip = 0;
   int focusTimerH = 0;
   int focusTimerM = 25;
@@ -100,6 +101,9 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
     if (controller.value == 0) {
       if(skip == 0){
         player.play(AssetSource('notify.mp3'));
+        if(isFocusing == true){
+          cycle++;
+        }
       }
       skip = 0;
       // Alternar entre foco e descanso
@@ -184,7 +188,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Pare o timer para pular etapas'),
+          content: Text('Pause o timer para pular etapas'),
           duration: Duration(seconds: 2),
         ),
       );
@@ -197,6 +201,17 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
       backgroundColor: const Color(0xfff5fbff),
       body: Column(
         children: [
+          Container(
+            alignment: AlignmentDirectional.bottomCenter,
+            height: 100,
+            child: Text(
+              isFocusing == false ? 'Hora do descanso' : 'Hora do foco',
+              style: TextStyle(
+                fontFamily: 'Titi',
+                fontSize: 20,
+              ),
+            ),
+          ),
           Expanded(
             child: Center(
               child: Stack(
@@ -223,6 +238,17 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ),
+          Container(
+            alignment: AlignmentDirectional.topCenter,
+            height: 70,
+            child: Text(
+              'Ciclo: $cycle / 4',
+              style: TextStyle(
+                fontFamily: 'Titi',
+                fontSize: 15
               ),
             ),
           ),
