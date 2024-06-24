@@ -81,11 +81,15 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
   int cycle = 1;
   int skip = 0;
   int focusTimerH = 0;
-  int focusTimerM = 25;
-  int focusTimerS = 0;
+  int focusTimerM = 0;
+  int focusTimerS = 2;
   int shortBreakTimerH = 0;
-  int shortBreakTimerM = 5;
-  int shortBreakTimerS = 0;
+  int shortBreakTimerM = 0;
+  int shortBreakTimerS = 3;
+  int longBreakTimerH = 0;
+  int longBreakTimerM = 10;
+  int longBreakTimerS = 0;
+  int numberCycles = 4;
 
   String get countText {
     Duration count = controller.duration! * controller.value;
@@ -103,6 +107,12 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
         player.play(AssetSource('notify.mp3'));
         if(isFocusing == false){
           cycle++;
+        }
+        if(cycle > numberCycles) {
+          cycle = 1;
+          controller.stop();
+          isCounting = false;
+          widget.isCountingNotifier.value = isCounting;
         }
       }
       skip = 0;
@@ -131,6 +141,10 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
       shortBreakTimerH = focusTime.returnBreakHours;
       shortBreakTimerM = focusTime.returnBreakMinutes;
       shortBreakTimerS = focusTime.returnBreakSeconds;
+      longBreakTimerH = focusTime.returnLongBreakHours;
+      longBreakTimerM = focusTime.returnLongBreakMinutes;
+      longBreakTimerS = focusTime.returnLongBreakSeconds;
+      numberCycles = focusTime.returnNumberCycles;
 
       controller.duration = isFocusing
           ? Duration(hours: focusTimerH, minutes: focusTimerM, seconds: focusTimerS)
@@ -245,7 +259,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
             alignment: AlignmentDirectional.topCenter,
             height: 70,
             child: Text(
-              'Ciclo atual: $cycle / 4',
+              'Ciclo atual: $cycle / $numberCycles',
               style: TextStyle(
                 fontFamily: 'Titi',
                 fontSize: 15

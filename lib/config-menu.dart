@@ -30,23 +30,24 @@ class PomodoroConfig extends StatefulWidget {
 
 class _PomodoroConfigState extends State<PomodoroConfig> {
   final TextEditingController focusHoursController =
-  TextEditingController(text: '00');
+      TextEditingController(text: '00');
   final TextEditingController focusMinutesController =
-  TextEditingController(text: '25');
+      TextEditingController(text: '25');
   final TextEditingController focusSecondsController =
-  TextEditingController(text: '00');
+      TextEditingController(text: '00');
   final TextEditingController shortBreakHoursController =
-  TextEditingController(text: '00');
+      TextEditingController(text: '00');
   final TextEditingController shortBreakMinutesController =
-  TextEditingController(text: '05');
+      TextEditingController(text: '05');
   final TextEditingController shortBreakSecondsController =
-  TextEditingController(text: '00');
+      TextEditingController(text: '00');
   final TextEditingController longBreakHoursController =
-  TextEditingController(text: '00');
+      TextEditingController(text: '00');
   final TextEditingController longBreakMinutesController =
-  TextEditingController(text: '10');
+      TextEditingController(text: '10');
   final TextEditingController longBreakSecondsController =
-  TextEditingController(text: '00');
+      TextEditingController(text: '00');
+  final TextEditingController numeberCycles = TextEditingController(text: '04');
 
   String focusHours = '00';
   String focusMinutes = '25';
@@ -57,6 +58,7 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
   String longBreakHours = '00';
   String longBreakMinutes = '10';
   String longBreakSeconds = '00';
+  String cycles = '04';
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,8 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.only(bottom: 100), // Reserve espaço para o botão
+              padding: EdgeInsets.only(bottom: 100),
+              // Reserve espaço para o botão
               child: Column(
                 children: [
                   Container(
@@ -240,6 +243,30 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
                       ),
                     ],
                   ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    alignment: AlignmentDirectional.center,
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      'Quantidade de ciclos de foco',
+                      style: TextStyle(fontSize: 20, fontFamily: 'Titi'),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomTextField(
+                        controller: numeberCycles,
+                        onChanged: (value) {
+                          setState(() {
+                            cycles = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -264,6 +291,10 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
                     int.parse(shortBreakHours),
                     int.parse(shortBreakMinutes),
                     int.parse(shortBreakSeconds),
+                    int.parse(longBreakHours),
+                    int.parse(longBreakMinutes),
+                    int.parse(longBreakSeconds),
+                    int.parse(cycles)
                   );
                   Navigator.pop(context, focusTime);
                 },
@@ -332,6 +363,10 @@ class FocusTime {
   final int returnBreakHours;
   final int returnBreakMinutes;
   final int returnBreakSeconds;
+  final int returnLongBreakHours;
+  final int returnLongBreakMinutes;
+  final int returnLongBreakSeconds;
+  final int returnNumberCycles;
 
   FocusTime(
       this.returnFocusHours,
@@ -339,5 +374,10 @@ class FocusTime {
       this.returnFocusSeconds,
       this.returnBreakHours,
       this.returnBreakMinutes,
-      this.returnBreakSeconds);
+      this.returnBreakSeconds,
+      this.returnLongBreakHours,
+      this.returnLongBreakMinutes,
+      this.returnLongBreakSeconds,
+      this.returnNumberCycles,
+      );
 }
