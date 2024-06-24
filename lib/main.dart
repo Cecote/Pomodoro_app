@@ -101,7 +101,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
     if (controller.value == 0) {
       if(skip == 0){
         player.play(AssetSource('notify.mp3'));
-        if(isFocusing == true){
+        if(isFocusing == false){
           cycle++;
         }
       }
@@ -245,7 +245,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
             alignment: AlignmentDirectional.topCenter,
             height: 70,
             child: Text(
-              'Ciclo: $cycle / 4',
+              'Ciclo atual: $cycle / 4',
               style: TextStyle(
                 fontFamily: 'Titi',
                 fontSize: 15
