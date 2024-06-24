@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:Pomodoro/widgets/round-button.dart';
@@ -285,7 +284,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
                     child: ConfettiWidget(
                       confettiController: _confettiController,
                       blastDirection: -pi / 2,
-                      emissionFrequency: 0.2,
+                      emissionFrequency: 0.25,
                       numberOfParticles: 40,
                       blastDirectionality: BlastDirectionality.explosive,
                       gravity: 0.1,
@@ -378,9 +377,7 @@ class MenuButton extends StatelessWidget {
           context,
           MaterialPageRoute(builder: (context) => const MenuPage()),
         );
-        if (result != null) {
-          onValueSelected(result);
-        }
+        onValueSelected(result);
       }
           : null,
       color: Colors.black,
