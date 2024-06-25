@@ -155,6 +155,7 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
       longBreakTimerM = focusTime.returnLongBreakMinutes;
       longBreakTimerS = focusTime.returnLongBreakSeconds;
       numberCycles = focusTime.returnNumberCycles;
+      cycle = 1;
 
       controller.duration = isFocusing
           ? Duration(hours: focusTimerH, minutes: focusTimerM, seconds: focusTimerS)
