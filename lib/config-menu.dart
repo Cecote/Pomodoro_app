@@ -30,23 +30,23 @@ class PomodoroConfig extends StatefulWidget {
 
 class _PomodoroConfigState extends State<PomodoroConfig> {
   final TextEditingController focusHoursController =
-      TextEditingController(text: '00');
+  TextEditingController(text: '00');
   final TextEditingController focusMinutesController =
-      TextEditingController(text: '25');
+  TextEditingController(text: '25');
   final TextEditingController focusSecondsController =
-      TextEditingController(text: '00');
+  TextEditingController(text: '00');
   final TextEditingController shortBreakHoursController =
-      TextEditingController(text: '00');
+  TextEditingController(text: '00');
   final TextEditingController shortBreakMinutesController =
-      TextEditingController(text: '05');
+  TextEditingController(text: '05');
   final TextEditingController shortBreakSecondsController =
-      TextEditingController(text: '00');
+  TextEditingController(text: '00');
   final TextEditingController longBreakHoursController =
-      TextEditingController(text: '00');
+  TextEditingController(text: '00');
   final TextEditingController longBreakMinutesController =
-      TextEditingController(text: '10');
+  TextEditingController(text: '10');
   final TextEditingController longBreakSecondsController =
-      TextEditingController(text: '00');
+  TextEditingController(text: '00');
   final TextEditingController numeberCycles = TextEditingController(text: '04');
 
   String focusHours = '00';
@@ -64,218 +64,210 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xfff5fbff),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 100),
-              // Reserve espaço para o botão
-              child: Column(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Container(
+                alignment: AlignmentDirectional.center,
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'Tempo para focar',
+                  style: TextStyle(fontSize: 20, fontFamily: 'Titi'),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    alignment: AlignmentDirectional.center,
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      'Tempo para focar',
-                      style: TextStyle(fontSize: 20, fontFamily: 'Titi'),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomTextField(
-                        controller: focusHoursController,
-                        onChanged: (value) {
-                          setState(() {
-                            focusHours = value;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        width: 20.0,
-                        height: 50.0,
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 30),
-                          ':',
-                        ),
-                      ),
-                      CustomTextField(
-                        controller: focusMinutesController,
-                        onChanged: (value) {
-                          setState(() {
-                            focusMinutes = value;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        width: 20.0,
-                        height: 50.0,
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 30),
-                          ':',
-                        ),
-                      ),
-                      CustomTextField(
-                        controller: focusSecondsController,
-                        onChanged: (value) {
-                          setState(() {
-                            focusSeconds = value;
-                          });
-                        },
-                      ),
-                    ],
+                  CustomTextField(
+                    controller: focusHoursController,
+                    onChanged: (value) {
+                      setState(() {
+                        focusHours = value;
+                      });
+                    },
                   ),
                   SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                    alignment: AlignmentDirectional.center,
-                    padding: EdgeInsets.all(10),
+                    width: 20.0,
+                    height: 50.0,
                     child: Text(
-                      'Tempo para descansar (Curto)',
-                      style: TextStyle(fontSize: 20, fontFamily: 'Titi'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 30),
+                      ':',
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomTextField(
-                        controller: shortBreakHoursController,
-                        onChanged: (value) {
-                          setState(() {
-                            shortBreakHours = value;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        width: 20.0,
-                        height: 50.0,
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 30),
-                          ':',
-                        ),
-                      ),
-                      CustomTextField(
-                        controller: shortBreakMinutesController,
-                        onChanged: (value) {
-                          setState(() {
-                            shortBreakMinutes = value;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        width: 20.0,
-                        height: 50.0,
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 30),
-                          ':',
-                        ),
-                      ),
-                      CustomTextField(
-                        controller: shortBreakSecondsController,
-                        onChanged: (value) {
-                          setState(() {
-                            shortBreakSeconds = value;
-                          });
-                        },
-                      ),
-                    ],
+                  CustomTextField(
+                    controller: focusMinutesController,
+                    onChanged: (value) {
+                      setState(() {
+                        focusMinutes = value;
+                      });
+                    },
                   ),
                   SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                    alignment: AlignmentDirectional.center,
-                    padding: EdgeInsets.all(10),
+                    width: 20.0,
+                    height: 50.0,
                     child: Text(
-                      'Tempo para descansar (Longo)',
-                      style: TextStyle(fontSize: 20, fontFamily: 'Titi'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 30),
+                      ':',
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomTextField(
-                        controller: longBreakHoursController,
-                        onChanged: (value) {
-                          setState(() {
-                            longBreakHours = value;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        width: 20.0,
-                        height: 50.0,
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 30),
-                          ':',
-                        ),
-                      ),
-                      CustomTextField(
-                        controller: longBreakMinutesController,
-                        onChanged: (value) {
-                          setState(() {
-                            longBreakMinutes = value;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        width: 20.0,
-                        height: 50.0,
-                        child: Text(
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 30),
-                          ':',
-                        ),
-                      ),
-                      CustomTextField(
-                        controller: longBreakSecondsController,
-                        onChanged: (value) {
-                          setState(() {
-                            longBreakSeconds = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                    alignment: AlignmentDirectional.center,
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      'Quantidade de ciclos de foco',
-                      style: TextStyle(fontSize: 20, fontFamily: 'Titi'),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomTextField(
-                        controller: numeberCycles,
-                        onChanged: (value) {
-                          setState(() {
-                            cycles = value;
-                          });
-                        },
-                      ),
-                    ],
+                  CustomTextField(
+                    controller: focusSecondsController,
+                    onChanged: (value) {
+                      setState(() {
+                        focusSeconds = value;
+                      });
+                    },
                   ),
                 ],
               ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              child: RoundButton(
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                alignment: AlignmentDirectional.center,
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'Tempo para descansar (Curto)',
+                  style: TextStyle(fontSize: 20, fontFamily: 'Titi'),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomTextField(
+                    controller: shortBreakHoursController,
+                    onChanged: (value) {
+                      setState(() {
+                        shortBreakHours = value;
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    width: 20.0,
+                    height: 50.0,
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 30),
+                      ':',
+                    ),
+                  ),
+                  CustomTextField(
+                    controller: shortBreakMinutesController,
+                    onChanged: (value) {
+                      setState(() {
+                        shortBreakMinutes = value;
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    width: 20.0,
+                    height: 50.0,
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 30),
+                      ':',
+                    ),
+                  ),
+                  CustomTextField(
+                    controller: shortBreakSecondsController,
+                    onChanged: (value) {
+                      setState(() {
+                        shortBreakSeconds = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                alignment: AlignmentDirectional.center,
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'Tempo para descansar (Longo)',
+                  style: TextStyle(fontSize: 20, fontFamily: 'Titi'),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomTextField(
+                    controller: longBreakHoursController,
+                    onChanged: (value) {
+                      setState(() {
+                        longBreakHours = value;
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    width: 20.0,
+                    height: 50.0,
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 30),
+                      ':',
+                    ),
+                  ),
+                  CustomTextField(
+                    controller: longBreakMinutesController,
+                    onChanged: (value) {
+                      setState(() {
+                        longBreakMinutes = value;
+                      });
+                    },
+                  ),
+                  SizedBox(
+                    width: 20.0,
+                    height: 50.0,
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 30),
+                      ':',
+                    ),
+                  ),
+                  CustomTextField(
+                    controller: longBreakSecondsController,
+                    onChanged: (value) {
+                      setState(() {
+                        longBreakSeconds = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                alignment: AlignmentDirectional.center,
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'Quantidade de ciclos de foco',
+                  style: TextStyle(fontSize: 20, fontFamily: 'Titi'),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomTextField(
+                    controller: numeberCycles,
+                    onChanged: (value) {
+                      setState(() {
+                        cycles = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              RoundButton(
                 text: 'Salvar',
                 onPressed: () {
                   // Implemente a lógica de salvar aqui
@@ -294,14 +286,14 @@ class _PomodoroConfigState extends State<PomodoroConfig> {
                     int.parse(longBreakHours),
                     int.parse(longBreakMinutes),
                     int.parse(longBreakSeconds),
-                    int.parse(cycles)
+                    int.parse(cycles),
                   );
                   Navigator.pop(context, focusTime);
                 },
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -343,8 +335,7 @@ class CustomTextField extends StatelessWidget {
         onSubmitted: (value) {
           if (value.length == 1) {
             controller.text = '0' + value;
-            onChanged('0' +
-                value); // Ensure the state is updated with the padded value
+            onChanged('0' + value);
           }
           if (value.length == 0) {
             controller.text = '00';
@@ -357,27 +348,26 @@ class CustomTextField extends StatelessWidget {
 }
 
 class FocusTime {
-  final int returnFocusHours;
-  final int returnFocusMinutes;
-  final int returnFocusSeconds;
-  final int returnBreakHours;
-  final int returnBreakMinutes;
-  final int returnBreakSeconds;
-  final int returnLongBreakHours;
-  final int returnLongBreakMinutes;
-  final int returnLongBreakSeconds;
-  final int returnNumberCycles;
+  final int focusHours;
+  final int focusMinutes;
+  final int focusSeconds;
+  final int shortBreakHours;
+  final int shortBreakMinutes;
+  final int shortBreakSeconds;
+  final int longBreakHours;
+  final int longBreakMinutes;
+  final int longBreakSeconds;
+  final int cycles;
 
   FocusTime(
-      this.returnFocusHours,
-      this.returnFocusMinutes,
-      this.returnFocusSeconds,
-      this.returnBreakHours,
-      this.returnBreakMinutes,
-      this.returnBreakSeconds,
-      this.returnLongBreakHours,
-      this.returnLongBreakMinutes,
-      this.returnLongBreakSeconds,
-      this.returnNumberCycles,
-      );
+      this.focusHours,
+      this.focusMinutes,
+      this.focusSeconds,
+      this.shortBreakHours,
+      this.shortBreakMinutes,
+      this.shortBreakSeconds,
+      this.longBreakHours,
+      this.longBreakMinutes,
+      this.longBreakSeconds,
+      this.cycles);
 }

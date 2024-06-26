@@ -145,16 +145,16 @@ class _PomoTimerState extends State<PomoTimer> with TickerProviderStateMixin {
     setState(() {
       isReturnConfigPage = true;
       skip++;
-      focusTimerH = focusTime.returnFocusHours;
-      focusTimerM = focusTime.returnFocusMinutes;
-      focusTimerS = focusTime.returnFocusSeconds;
-      shortBreakTimerH = focusTime.returnBreakHours;
-      shortBreakTimerM = focusTime.returnBreakMinutes;
-      shortBreakTimerS = focusTime.returnBreakSeconds;
-      longBreakTimerH = focusTime.returnLongBreakHours;
-      longBreakTimerM = focusTime.returnLongBreakMinutes;
-      longBreakTimerS = focusTime.returnLongBreakSeconds;
-      numberCycles = focusTime.returnNumberCycles;
+      focusTimerH = focusTime.focusHours;
+      focusTimerM = focusTime.focusMinutes;
+      focusTimerS = focusTime.focusSeconds;
+      shortBreakTimerH = focusTime.shortBreakHours;
+      shortBreakTimerM = focusTime.shortBreakMinutes;
+      shortBreakTimerS = focusTime.shortBreakSeconds;
+      longBreakTimerH = focusTime.longBreakHours;
+      longBreakTimerM = focusTime.longBreakMinutes;
+      longBreakTimerS = focusTime.longBreakSeconds;
+      numberCycles = focusTime.cycles;
       cycle = 1;
 
       controller.duration = isFocusing
